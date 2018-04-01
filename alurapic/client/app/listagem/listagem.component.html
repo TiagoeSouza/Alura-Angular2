@@ -2,6 +2,7 @@
     <h1 class="text-center">Alurapic</h1>
 </div>
 <div class="container">
+    <p *ngIf="mensagem.length" class="alert alert-info">{{mensagem}}</p>
     <div class="row">
         <div class="col-md-12">
             <form>
@@ -12,8 +13,8 @@
                         </a>
                     </span>
 
-                     <!-- campo para filtrar pelo titulo -->
-                     <input #textoProcurado (keyup)="0" class="form-control" placeholder="Filtrar pelo título da foto">               
+                    <!-- campo para filtrar pelo titulo -->
+                    <input #textoProcurado (keyup)="0" class="form-control" placeholder="Filtrar pelo título da foto">
                 </div>
             </form>
         </div>
@@ -22,8 +23,14 @@
     <!-- fim row -->
     <br>
     <div class="row">
-        <painel *ngFor="let foto of fotos | filtroPorTitulo: textoProcurado.value" titulo="{{foto.titulo | uppercase}}" class="col-xs-6 col-md-2">
-            <foto url="{{foto.url}}" titulo="{{foto.titulo}}"></foto>
+        <painel #painel *ngFor="let foto of fotos | filtroPorTitulo: textoProcurado.value" titulo="{{foto.titulo | uppercase}}" class="col-xs-6 col-md-2">
+            <a [routerLink]="['/cadastro',foto._id]">
+                <foto url="{{foto.url}}" titulo="{{foto.titulo}}"></foto>
+            </a>
+            <br>
+            <!-- <button class="btn btn-danger btn-block" (click)="remove(foto)">Remover</button> -->
+            <botao nome="Remover" estilo="danger btn-block" (acao)="modal.show()" [confirmacao]="false"></botao>
+            <modal #modal frase="Tem certeza que deseja remover esta foto?" (confirma)="remove(foto, painel)"></modal>
         </painel>
     </div>
 </div>

@@ -10,12 +10,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require("@angular/core");
 var foto_component_1 = require("../foto/foto.component");
-var http_1 = require("@angular/http");
 var forms_1 = require("@angular/forms");
+var foto_service_1 = require("../foto/foto.service");
+var router_1 = require("@angular/router");
 var CadastroComponent = (function () {
-    function CadastroComponent(http, fb) {
+    function CadastroComponent(service, fb, route, router) {
+        var _this = this;
         this.foto = new foto_component_1.FotoComponent();
-        this.http = http;
+        this.mensagem = '';
+        this.service = service;
+        this.route = route;
+        this.router = router;
+        this.route.params.subscribe(function (params) {
+            var id = params["id"];
+            if (id) {
+                console.log(id);
+                _this.service.buscaPorId(id)
+                    .subscribe(function (foto) { return _this.foto = foto; }, function (error) { return console.log(error); });
+            }
+        });
         this.meuForm = fb.group({
             titulo: ['', forms_1.Validators.compose([forms_1.Validators.required, forms_1.Validators.minLength(4)])],
             url: ['', forms_1.Validators.required],
@@ -26,11 +39,14 @@ var CadastroComponent = (function () {
         var _this = this;
         event.preventDefault();
         console.log(this.foto);
-        var headers = new http_1.Headers();
-        headers.append('Content-Type', 'application/json');
-        this.http.post('v1/fotos', JSON.stringify(this.foto), { headers: headers }).subscribe(function () {
-            _this.foto = new foto_component_1.FotoComponent();
+        this.service
+            .cadastra(this.foto)
+            .subscribe(function (res) {
+            _this.mensagem = res.mensagem;
+            _this.meuForm.reset();
             console.log('Foto salva com sucesso!');
+            if (!res.inclusao)
+                _this.router.navigate(['']);
         }, function (error) { return console.log(error); });
     };
     CadastroComponent = __decorate([
@@ -39,7 +55,7 @@ var CadastroComponent = (function () {
             selector: 'cadastro',
             templateUrl: './cadastro.component.html'
         }), 
-        __metadata('design:paramtypes', [http_1.Http, forms_1.FormBuilder])
+        __metadata('design:paramtypes', [foto_service_1.FotoService, forms_1.FormBuilder, router_1.ActivatedRoute, router_1.Router])
     ], CadastroComponent);
     return CadastroComponent;
 }());

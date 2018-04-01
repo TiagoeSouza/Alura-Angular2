@@ -9,25 +9,46 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require("@angular/core");
-var http_1 = require("@angular/http");
+var foto_service_1 = require("../foto/foto.service");
 var ListagemComponent = (function () {
-    function ListagemComponent(http) {
+    function ListagemComponent(service) {
         var _this = this;
         this.fotos = [];
-        http.get('v1/fotos')
-            .map(function (res) { return res.json(); })
+        this.mensagem = "";
+        this.service = service;
+        this.service
+            .lista()
             .subscribe(function (fotos) {
             _this.fotos = fotos;
-            console.log(_this.fotos);
         }, function (erro) { return console.log(erro); });
     }
+    ListagemComponent.prototype.remove = function (foto, painel) {
+        var _this = this;
+        // if (confirm('Deseja realmente excluir a foto selecionada?')) {
+        this.service.remove(foto)
+            .subscribe(function () {
+            painel.fadeOut(function () {
+                var novasFotos = _this.fotos.slice(0);
+                var indice = novasFotos.indexOf(foto);
+                novasFotos.splice(indice, 1);
+                _this.fotos = novasFotos;
+                console.log("Foto Removida com Sucesso");
+                _this.mensagem = "Foto removida com sucesso";
+            });
+        }, function (error) {
+            console.log(error);
+            _this.mensagem = "Não foi possível remover a foto";
+        });
+        window.scroll(0, 0);
+        // }
+    };
     ListagemComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
             selector: 'listagem',
             templateUrl: './listagem.component.html'
         }), 
-        __metadata('design:paramtypes', [http_1.Http])
+        __metadata('design:paramtypes', [foto_service_1.FotoService])
     ], ListagemComponent);
     return ListagemComponent;
 }());

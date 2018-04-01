@@ -2,7 +2,7 @@
 <html>
 
 <head>
-<base href="/">
+    <base href="/">
     <title>Alurapic</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
@@ -10,8 +10,16 @@
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap-theme.min.css">
 
-    <script src="node_modules/core-js/client/shim.min.js"></script>
+    <!-- importando o estilo do jQueryUI -->
+    <link rel="stylesheet" href="node_modules/jqueryui-browser/themes/base/jquery-ui.css">
 
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    
+    <!-- tem que ser importado depois do jQuery -->
+    <script src="node_modules/jquery-migrate/dist/jquery-migrate.min.js"></script>
+    <script src="node_modules/jqueryui-browser/ui/jquery-ui.js"></script>
+
+    <script src="node_modules/core-js/client/shim.min.js"></script>
     <script src="node_modules/zone.js/dist/zone.js"></script>
     <script src="node_modules/reflect-metadata/Reflect.js"></script>
     <script src="node_modules/systemjs/dist/system.src.js"></script>
